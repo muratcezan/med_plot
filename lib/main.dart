@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     // firstRun();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 100),
     )..repeat();
     // _timer = Timer.periodic(const Duration(milliseconds: 200), _callTimerEvent);
     super.initState();
@@ -70,18 +70,18 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
           child: AnimatedBuilder(
             animation: _animationController,
-            builder: (_, constraints) {
+            builder: (_, __) {
               // // print(counter);
-              if (counter < lines.length - 1) {
+              if (counter < 1000) {
                 counter++;
               } else {
-                counter = 1;
+                counter = 0;
               }
 
               // _lineController.setLines = lines;
               // _lineController._updateLines(counter);
               // lines = _lineController.getLines;
-              // print("running");
+              print("running");
 
               return Container(
                 width: 1000, //constraints.widthConstraints().maxWidth,
@@ -89,10 +89,10 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 color: Colors.black,
                 child: CustomPaint(
                   painter: DrawLinePainter(
-                    deleteLineColor: Colors.black,
-                    drawLineColor: Colors.green,
-                    startCleanerPoint: 996.0,
-                  ),
+                      deleteLineColor: Colors.black,
+                      drawLineColor: Colors.green,
+                      startCleanerPoint: counter,
+                      lines: lines),
                   size: const Size(1000, 1000),
                 ),
               );

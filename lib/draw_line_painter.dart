@@ -11,7 +11,7 @@ class DrawLinePainter extends CustomPainter {
     required this.drawLineColor,
     required this.deleteLineColor,
     required this.startCleanerPoint,
-    // required this.lines,
+    required this.lines,
   });
 
   getPaint(Color color) {
@@ -40,13 +40,14 @@ class DrawLinePainter extends CustomPainter {
     );
 
     // data line
-    for (double i = 0.0; i < size.width - 0.01; i = i + 0.01) {
+    // for (int i = 0; i < lines.length; i = i++) {
+    for (double i = 0.0; i < size.width; i = i + 1) {
       // Offset startLine = Offset(lines[i.toInt()].getStartX,
       //     lines[i.toInt()].getStartY + size.height / 2);
       // Offset stopLine = Offset(lines[i.toInt()].getStopX,
       //     lines[i.toInt()].getStopY + size.height / 2);
-      Offset startLine = Offset(i, size.height / 2);
-      Offset stopLine = Offset(i + 0.01, size.height / 2);
+      Offset startLine = Offset(i.toDouble(), size.height / 2);
+      Offset stopLine = Offset(i.toDouble() + 1, size.height / 2);
 
       canvas.drawLine(startLine, stopLine, plotPaint);
     }

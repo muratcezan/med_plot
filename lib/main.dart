@@ -32,8 +32,6 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   bool tt = false;
 
   List<Line> lines = [];
-  // List.generate(125, (index) => Line(startX: index.toDouble()));
-
   late AnimationController _animationController;
 
   _callTimerEvent(Timer timer) {
@@ -68,6 +66,21 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  _updateLines(double counter) {
+    sinus = math.sin(counter * 0.1) * 200.0;
+    // print(counter);
+
+    double transportX = this.lines[counter.toInt() - 1].getStopX;
+    double transportY = this.lines[counter.toInt() - 1].getStopY;
+    // print("Transport X = " + transportX.toString());
+    // print("Transport Y = " + transportY.toString());
+
+    this.lines[counter.toInt()].setStartX = transportX;
+    this.lines[counter.toInt()].setStartY = transportY;
+    this.lines[counter.toInt()].setStopX = counter.toDouble();
+    this.lines[counter.toInt()].setStopY = sinus;
+  }
+
   bool eraserr = false;
   @override
   Widget build(BuildContext context) {
@@ -86,13 +99,13 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               if (counter < 1000) {
                 counter++;
               } else {
-                counter = 0;
+                counter = 1;
               }
-
+              _updateLines(counter);
               // _lineController.setLines = lines;
               // _lineController._updateLines(counter);
               // lines = _lineController.getLines;
-              print("running");
+              // print("running");
 
               return Container(
                 width: 1000, //constraints.widthConstraints().maxWidth,

@@ -1,13 +1,7 @@
-// ignore_for_file: unnecessary_this
-
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:math' as math;
-
-import 'package:flutter/physics.dart';
-
-import 'package:cust_plot/line.dart';
 import 'package:cust_plot/draw_line_painter.dart';
+import 'package:cust_plot/line.dart';
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 void main() {
   runApp(const MyApp());
@@ -21,25 +15,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  List<Line> ll = [
-    Line(),
-  ];
-
-  double sy = 0.0;
-  double counter = 0;
-  late Timer _timer;
   late double sinus;
-  bool tt = false;
+  double counter = 0;
 
   List<Line> lines = [];
+
   late AnimationController _animationController;
 
-  _callTimerEvent(Timer timer) {
-    print("call _callTimerEvent");
-  }
-
   void firstRun() {
-    for (int i = 0; i < 999; i++) {
+    for (int i = 0; i < 1000; i++) {
       lines.add(Line(
         startX: i.toDouble(),
         startY: 0.0,
@@ -56,35 +40,29 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       vsync: this,
       duration: const Duration(milliseconds: 100),
     )..repeat();
-    // _timer = Timer.periodic(const Duration(milliseconds: 200), _callTimerEvent);
     super.initState();
   }
 
   @override
   void dispose() {
-    // _animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   _updateLines(double counter) {
     sinus = math.sin(counter * 0.1) * 200.0;
-    // print(counter);
 
-    double transportX = this.lines[counter.toInt() - 1].getStopX;
-    double transportY = this.lines[counter.toInt() - 1].getStopY;
-    // print("Transport X = " + transportX.toString());
-    // print("Transport Y = " + transportY.toString());
+    double transportX = lines[counter.toInt() - 1].getStopX;
+    double transportY = lines[counter.toInt() - 1].getStopY;
 
-    this.lines[counter.toInt()].setStartX = transportX;
-    this.lines[counter.toInt()].setStartY = transportY;
-    this.lines[counter.toInt()].setStopX = counter.toDouble();
-    this.lines[counter.toInt()].setStopY = sinus;
+    lines[counter.toInt()].setStartX = transportX;
+    lines[counter.toInt()].setStartY = transportY;
+    lines[counter.toInt()].setStopX = counter.toDouble();
+    lines[counter.toInt()].setStopY = sinus;
   }
 
-  bool eraserr = false;
   @override
   Widget build(BuildContext context) {
-    var _lineController = LineController();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -95,21 +73,16 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           child: AnimatedBuilder(
             animation: _animationController,
             builder: (_, __) {
-              // // print(counter);
-              if (counter < 1000) {
+              if (counter < 999) {
                 counter++;
               } else {
                 counter = 1;
               }
               _updateLines(counter);
-              // _lineController.setLines = lines;
-              // _lineController._updateLines(counter);
-              // lines = _lineController.getLines;
-              // print("running");
 
               return Container(
                 width: 1000, //constraints.widthConstraints().maxWidth,
-                height: 1000, //constraints.heightConstraints().maxHeight / 2,
+                height: 500, //constraints.heightConstraints().maxHeight / 2,
                 color: Colors.black,
                 child: CustomPaint(
                   painter: DrawLinePainter(
@@ -127,82 +100,3 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     );
   }
 }
-
-// for Line's start and stop points
-class LinePoint {
-  double x;
-  double y;
-
-  // Point Constructure
-  LinePoint({
-    Key? key,
-    required this.x,
-    required this.y,
-  });
-
-  // X parameter
-  set setX(double x) {
-    this.x = x;
-  }
-
-  get getX {
-    return this.x;
-  }
-
-  // Y parameter
-  set setY(double y) {
-    this.y = y;
-  }
-
-  get getY {
-    return y;
-  }
-}
-
-class LineController {
-  late List<Line> lines;
-  double sinus = 0;
-  int counter = 0;
-  LineController();
-
-  _updateLines(double counter) {
-    sinus = math.sin(counter * 0.1) * 200.0;
-    // print(counter);
-
-    double transportX = this.lines[counter.toInt() - 1].getStopX;
-    double transportY = this.lines[counter.toInt() - 1].getStopY;
-    // print("Transport X = " + transportX.toString());
-    // print("Transport Y = " + transportY.toString());
-
-    this.lines[counter.toInt()].setStartX = transportX;
-    this.lines[counter.toInt()].setStartY = transportY;
-    this.lines[counter.toInt()].setStopX = counter.toDouble();
-    this.lines[counter.toInt()].setStopY = sinus;
-  }
-
-  set setLines(List<Line> lines) {
-    this.lines = lines;
-  }
-
-  get getLines {
-    return this.lines;
-  }
-}
-
-
-
-
-
-
-
-
-  // void firstRun() {
-  //   for (int i = 0; i < 75; i++) {
-  //     lines.add(Line(
-  //       startX: i.toDouble(),
-  //       startY: 0.0,
-  //       stopX: (i +1).toDouble() ,
-  //       stopY: 0.0,
-  //     ));
-  //   }
-  // }

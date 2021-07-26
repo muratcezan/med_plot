@@ -3,7 +3,6 @@ class Line {
   double stopX;
   double startY;
   double stopY;
-  // var color;
 
   // Line Constructure
   Line({
@@ -11,10 +10,7 @@ class Line {
     this.stopX = 0.0,
     this.startY = 0.0,
     this.stopY = 0.0,
-    // this.color,
   });
-
-  fall() {}
 
   // StartX
   double get getStartX {

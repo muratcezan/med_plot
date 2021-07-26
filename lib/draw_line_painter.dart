@@ -40,14 +40,15 @@ class DrawLinePainter extends CustomPainter {
     );
 
     // data line
-    // for (int i = 0; i < lines.length; i = i++) {
-    for (double i = 0.0; i < size.width; i = i + 1) {
-      // Offset startLine = Offset(lines[i.toInt()].getStartX,
-      //     lines[i.toInt()].getStartY + size.height / 2);
-      // Offset stopLine = Offset(lines[i.toInt()].getStopX,
-      //     lines[i.toInt()].getStopY + size.height / 2);
-      Offset startLine = Offset(i.toDouble(), size.height / 2);
-      Offset stopLine = Offset(i.toDouble() + 1, size.height / 2);
+    for (int i = 0; i < lines.length; i++) {
+      // print(lines[i].getStartX);
+      // for (double i = 0.0; i < size.width; i = i + 1) {
+      Offset startLine =
+          Offset(lines[i].getStartX, lines[i].getStartY + size.height / 2);
+      Offset stopLine =
+          Offset(lines[i].getStopX, lines[i].getStopY + size.height / 2);
+      // Offset startLine = Offset(i.toDouble(), size.height / 2);
+      // Offset stopLine = Offset(i.toDouble() + 1, size.height / 2);
 
       canvas.drawLine(startLine, stopLine, plotPaint);
     }

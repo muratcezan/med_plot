@@ -31,8 +31,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   late double sinus;
   bool tt = false;
 
-  List<Line> lines =
-      List.generate(125, (index) => Line(startX: index.toDouble()));
+  List<Line> lines = [];
+  // List.generate(125, (index) => Line(startX: index.toDouble()));
 
   late AnimationController _animationController;
 
@@ -40,9 +40,20 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     print("call _callTimerEvent");
   }
 
+  void firstRun() {
+    for (int i = 0; i < 999; i++) {
+      lines.add(Line(
+        startX: i.toDouble(),
+        startY: 0.0,
+        stopX: (i + 1).toDouble(),
+        stopY: 0.0,
+      ));
+    }
+  }
+
   @override
   void initState() {
-    // firstRun();
+    firstRun();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
@@ -174,10 +185,10 @@ class LineController {
 
   // void firstRun() {
   //   for (int i = 0; i < 75; i++) {
-  //     ll.add(Line(
+  //     lines.add(Line(
   //       startX: i.toDouble(),
   //       startY: 0.0,
-  //       stopX: 0.0,
+  //       stopX: (i +1).toDouble() ,
   //       stopY: 0.0,
   //     ));
   //   }

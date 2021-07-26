@@ -6,6 +6,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/physics.dart';
 
+import 'package:cust_plot/line.dart';
+import 'package:cust_plot/draw_line_painter.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -27,86 +30,15 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   late Timer _timer;
   late double sinus;
   bool tt = false;
-  // _callTimerEvent(Timer timer) {
-  //   sinus = math.sin(counter * 0.1) * 100.0;
-  //   // print("Sinus = " + sinus.toString());
-  //   if (counter < 75) {
-  //     counter++;
-  //     print("Arttir");
-  //   } else {
-  //     tt = true;
-  //     counter = 1;
-  //     print("Tamamlandi");
-  //   }
-  //   double transportX = ll[counter.toInt() - 1].getStopX;
-  //   double transportY = ll[counter.toInt() - 1].getStopY;
-  //   print("Transport X = " + transportX.toString());
-  //   print("Transport Y = " + transportY.toString());
-  //   // if (counter > 2) {
-  //   //   _timer.cancel();
-  //   // }
-  //   setState(() {
-  //     if (ll.length > 75) {
-  //       // ll.removeAt(counter.toInt());
-  //       print("SILINDI");
-  //     }
-  //     if (!tt) {
-  //       ll.insert(
-  //         counter.toInt(),
-  //         Line(
-  //           startX: transportX,
-  //           startY: transportY,
-  //           stopX: counter.toDouble(),
-  //           stopY: sinus.toDouble(),
-  //         ),
-  //       );
-  //     } else {
-  //       ll[counter.toInt()].setStartX = transportX;
-  //       ll[counter.toInt()].setStartY = transportY;
-  //       ll[counter.toInt()].setStopX = counter.toDouble();
-  //       ll[counter.toInt()].setStopY = sinus;
-  //     }
-  //   });
-
-  //   // setState(() {
-  //   //   if (ll.length >= 100) {
-  //   //     print("inside");
-  //   //     ll.removeAt(counter.toInt());
-  //   //     ll.insert(
-  //   //       counter.toInt(),
-  //   //       Line(
-  //   //         startX: ll[counter.toInt() - 1].getStartX,
-  //   //         startY: ll[counter.toInt() - 1].getStartY,
-  //   //         stopX: counter,
-  //   //         stopY: counter,
-  //   //       ),
-  //   //     );
-  //   //   } else {
-  //   //     print("outside!");
-  //   //     ll.add(
-  //   //       Line(
-  //   //         startX: counter,
-  //   //       ),
-  //   //     );
-  //   //   }
-  //   // });
-  // }
-
-  // void firstRun() {
-  //   for (int i = 0; i < 75; i++) {
-  //     ll.add(Line(
-  //       startX: i.toDouble(),
-  //       startY: 0.0,
-  //       stopX: 0.0,
-  //       stopY: 0.0,
-  //     ));
-  //   }
-  // }
 
   List<Line> lines =
       List.generate(125, (index) => Line(startX: index.toDouble()));
 
   late AnimationController _animationController;
+
+  _callTimerEvent(Timer timer) {
+    print("call _callTimerEvent");
+  }
 
   @override
   void initState() {
@@ -121,7 +53,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _animationController.dispose();
+    // _animationController.dispose();
     super.dispose();
   }
 
@@ -138,22 +70,18 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
           child: AnimatedBuilder(
             animation: _animationController,
-            builder: (context, __) {
+            builder: (_, constraints) {
               // // print(counter);
-              // if (counter < lines.length - 1) {
-              //   counter++;
-              // } else {
-              //   counter = 1;
-              //   if (eraserr) {
-              //     eraserr = false;
-              //   } else {
-              //     eraserr = true;
-              //   }
-              // }
+              if (counter < lines.length - 1) {
+                counter++;
+              } else {
+                counter = 1;
+              }
 
               // _lineController.setLines = lines;
               // _lineController._updateLines(counter);
               // lines = _lineController.getLines;
+              // print("running");
 
               return Container(
                 width: 1000, //constraints.widthConstraints().maxWidth,
@@ -161,7 +89,10 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 color: Colors.black,
                 child: CustomPaint(
                   painter: DrawLinePainter(
-                      lineList: lines, erase: eraserr ? false : true),
+                    deleteLineColor: Colors.black,
+                    drawLineColor: Colors.green,
+                    startCleanerPoint: 996.0,
+                  ),
                   size: const Size(1000, 1000),
                 ),
               );
@@ -170,152 +101,6 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         ),
       ),
     );
-  }
-}
-
-class DrawLinePainter extends CustomPainter {
-  Color color;
-  int counter;
-  List<Line> lineList;
-  bool fisrtRun = false;
-  bool erase;
-
-  DrawLinePainter({
-    Key? key,
-    required this.lineList,
-    this.counter = 0,
-    this.color = Colors.green,
-    this.erase = false,
-  });
-
-  // Paint pt = Paint()
-  //   ..style = PaintingStyle.stroke
-  //   ..strokeWidth = 1.0
-  //   ..color = Colors.blue;
-
-  // Paint dpt = Paint()
-  //   ..style = PaintingStyle.stroke
-  //   ..strokeWidth = 1.0
-  //   ..color = Colors.transparent;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint pt = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0
-      ..color = Colors.blue;
-
-    Paint eraser = Paint()
-      ..strokeWidth = 1.0
-      ..color = Colors.black;
-
-    eraser.blendMode = BlendMode.clear;
-    // canvas.saveLayer(Offset.zero & size, Paint());
-    for (int i = 0; i < lineList.length; i++) {
-      canvas.drawLine(
-        Offset(lineList[i].getStartX, lineList[i].getStartY),
-        Offset(lineList[i].getStopX, lineList[i].getStopY),
-        // (erase ? eraser : pt),
-        pt,
-      );
-    }
-
-    _setUpdate() {
-      lineList[1].setStopY = lineList[1].getStopY + 10.0;
-    }
-    // canvas.restore();
-
-    // lineList.forEach((element) {
-    //   try {
-    //     canvas.drawLine(
-    //       Offset(element.getStartX, element.getStartY),
-    //       Offset(element.getStopX, element.getStopY),
-    //       pt,
-    //     );
-    //   } catch (e) {
-    //     print("PLOT BUG");
-    //   }
-    // });
-
-    // for (int i = 0; i < lineList.length; i++) {
-    //   // if (i < lineList.length - 5) {
-
-    //   canvas.drawLine(
-    //       Offset(lineList[i].startX.toDouble(), lineList[i].startY.toDouble()),
-    //       Offset(lineList[i].stopX.toDouble(), lineList[i].stopY.toDouble()),
-    //       // Offset(i.toDouble(), 0),
-    //       // Offset(i.toDouble() + 1, 0),
-    //       pt);
-    //   // } else {
-    //   //   canvas.drawLine(
-    //   //       Offset(
-    //   //           lineList[i].startX.toDouble(), lineList[i].startY.toDouble()),
-    //   //       Offset(lineList[i].stopX.toDouble(), lineList[i].stopY.toDouble()),
-    //   //       // Offset(i.toDouble(), 0),
-    //   //       // Offset(i.toDouble() + 1, 0),
-    //   //       ptt);
-    //   // }
-    // }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
-class Line {
-  double startX;
-  double stopX;
-  double startY;
-  double stopY;
-  // var color;
-
-  // Line Constructure
-  Line({
-    this.startX = 0.0,
-    this.stopX = 0.0,
-    this.startY = 0.0,
-    this.stopY = 0.0,
-    // this.color,
-  });
-
-  fall() {}
-
-  // StartX
-  double get getStartX {
-    return this.startX;
-  }
-
-  set setStartX(double startX) {
-    this.startX = startX;
-  }
-
-  // StarY
-  double get getStartY {
-    return this.startY;
-  }
-
-  set setStartY(double startY) {
-    this.startY = startY;
-  }
-
-  // StopX
-  double get getStopX {
-    return this.stopX;
-  }
-
-  set setStopX(double stopX) {
-    this.stopX = stopX;
-  }
-
-  // StopY
-  double get getStopY {
-    return this.stopY;
-  }
-
-  set setStopY(double stopY) {
-    this.stopY = stopY;
   }
 }
 
@@ -379,3 +164,21 @@ class LineController {
     return this.lines;
   }
 }
+
+
+
+
+
+
+
+
+  // void firstRun() {
+  //   for (int i = 0; i < 75; i++) {
+  //     ll.add(Line(
+  //       startX: i.toDouble(),
+  //       startY: 0.0,
+  //       stopX: 0.0,
+  //       stopY: 0.0,
+  //     ));
+  //   }
+  // }
